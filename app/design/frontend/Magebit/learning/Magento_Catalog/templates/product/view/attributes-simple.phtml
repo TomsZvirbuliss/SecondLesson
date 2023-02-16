@@ -1,0 +1,60 @@
+<?php
+/**
+ * This file is part of the Magebit package.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magebit Faq
+ * to newer versions in the future.
+ *
+ * @copyright Copyright (c) 2022 Magebit, Ltd. (https://magebit.com/)
+ * @license   GNU General Public License ("GPL") v3.0
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+?>
+<?php
+/**
+ * @var  $block \Magento\Catalog\Block\Product\View\Description
+ */
+
+$_product = $block->getProduct();
+$data = [];
+$defaultAttributes = ['dimensions', 'color', 'material'];
+$attributes = $block->getAdditionalData();
+
+foreach ($defaultAttributes as $default) {
+    if (array_key_exists($default, $attributes) and !array_key_exists($default, $data)) {
+        $data[$default] = $attributes[$default];
+    }
+}
+
+if (count($data) !== 3) {
+    foreach ($attributes as $key=>$attribute) {
+        if (!array_key_exists($key, $data)) {
+            $data[$key] = $attribute;
+        };
+        if (count($data) == 3) {
+            break;
+        }
+    }
+}
+if ($_product->getResource()->getAttribute('short_description')->getFrontend()->getValue($_product)) {
+    $description = $_product->getResource()->getAttribute('short_description')->getFrontend()->getValue($_product);
+} else if ($_product->getResource()->getAttribute('description')->getFrontend()->getValue($_product)) {
+    $description = $_product->getResource()->getAttribute('description')->getFrontend()->getValue($_product);
+} else {
+    $description = '';
+}
+?>
+<div class="custom-description">
+    <ul>
+        <?php foreach ($data as $atr) :?>
+            <?php if (array_key_exists('label', $atr) and array_key_exists('value', $atr)) :?>
+                <li><?= $atr['label'];?>: <?= $atr['value'];?></li>
+            <?php endif; ?>
+        <?php endforeach; ?>
+        <p><?= $description; ?></p>
+    </ul>
+</div>

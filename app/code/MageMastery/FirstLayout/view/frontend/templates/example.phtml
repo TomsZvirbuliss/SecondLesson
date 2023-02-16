@@ -1,0 +1,8 @@
+<?php
+use Magento\Framework\View\Element\Template;
+/** @var Template $block */
+?>
+
+<h1><?= $escaper->escapeHtml(__('My First Template')) ?></h1>
+<p><?= $escaper->escapeHTML(__('With Layout support')) ?></p>
+<p><?= $block->getData('custom_parameter');?></p>
